@@ -1,0 +1,207 @@
+
+import { Split } from 'mdx-deck'
+import {
+  CodeSurfer,
+  CodeSurferColumns,
+  Step,
+} from "code-surfer";
+import { github, vsDark } from "@code-surfer/themes";
+import petflix from "./assets/logo.png"
+
+export const theme = {
+  fonts: {body: 'avenir, sans-serif'},
+  styles: {
+    Slide: {
+      padding: '20px',
+      textAlign: 'left'
+    },
+    Split: {
+      textAlign: 'left!important'
+    },
+    img: {
+      maxWidth: '100%'
+    },
+    weights: 400,
+  },
+  colors: {
+    text: '#6AD798',
+    background: 'rgb(1, 22, 39)',
+    link: '#fff',
+    pre: '#fff',
+    preBackground: '#051626',
+    code: '#fff'
+  }
+}
+
+
+# Microfrontend
+
+<img src={petflix} style={{width:"500px"}} />
+
+
+---
+
+<Split>
+
+<img src="https://staticfanpage.akamaized.net/wp-content/uploads/sites/16/2017/08/camera-cafe-senza-olmo.jpg" style={{width:"500px"}} />
+
+
+## Inizio dell'esperienza della start-up (Team piccolo)
+
+- comunicazione semplice
+- ogni sviluppatore ha la conoscenza del progetto e delle funzioni
+- funzioni sviluppate velocemente
+- decisini prese alla macchinetta del caffe
+
+</Split>
+
+---
+
+<Split>
+
+<img src="https://www.cinematographe.it/wp-content/uploads/2017/08/camera-cafe-6-promo-nuovo-mondo.jpg" style={{width:"500px"}} />
+
+
+## La startup cresce (Team grande)
+
+Quando il progetto cresce, cresce il team ma la produttività non scala alla stessa velocità.
+
+- ogni dev non puo conoscere tutto
+- emergono i Knowledge silos
+- bisogna fare riunioni per decidere qualunque cosa anche le più banali
+
+
+</Split>
+
+---
+
+<Split>
+
+<img src="https://www.mozzafiato.info/wp-content/uploads/2018/04/divide_et_impera-1024x640.jpg" style={{width:"500px"}} />
+
+Mitigare gli effetti della poca produttività dividendo il progetto in parti. 
+
+Solitamente la divisione porta a fare uno slicing per tecnologie orizzontali: backend, frontend, ops
+
+</Split>
+
+
+
+---
+
+Nuovi silo e nuovi problemi
+
+---
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/5e3fa3ed-a788-4b09-96aa-8a519fe906b4/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T075517Z&X-Amz-Expires=86400&X-Amz-Signature=85d7d629a2cadfea6d6d7871186286da12bbced0e617859871ca8ac8db916c33&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"60vw"}} />
+
+---
+
+# E se...
+
+<Steps>
+
+- ... dividessimo il progetto per funzionalità "slicing verticale"
+- ... ogni slice contenesse tutta la logica del quella parte di user journey (rispetto ai microservizi ci mettiamo anche il frontend)
+- ... per ogni slice ci fosse un team dedicato che va dal frontender al backender
+
+</Steps>
+
+---
+
+# Vantaggi
+
+<Steps>
+
+- Ogni team è in grado di sviluppare una feature, senza dover cordinare team di frontend e backend
+- Nessun intermediario, es. api teams. Si delivera solo al cliente
+- Decisioni feature dentro il team
+- Progetto più piccolo quindi più facile farlo, rifattorializzarlo e switchare tecnologia
+
+</Steps>
+
+---
+
+> I micro front end non sono una tecnologia, ma un approccio organizzativo e architetturale 
+
+---
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cdf5770d-ecc1-4f3d-992d-79ab838d510e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T075604Z&X-Amz-Expires=86400&X-Amz-Signature=0ddc60b96c724fec0388d317b4d7e6d81ba21197261a22451c14fe5d478bfdc6&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"70vw"}} />
+
+---
+
+# Come implementarli?
+
+---
+
+> Ogni sistema é autonoma e funziona a prescindere dagli altri
+
+<Steps>
+
+- microservizi
+- datastore autonomo
+- team dedicato
+
+</Steps>
+
+---
+
+# teams
+
+---
+
+<Split>
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/ba3cff10-7dcb-46ef-a34c-b02dad6a5546/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T081201Z&X-Amz-Expires=86400&X-Amz-Signature=51a36a59197a7dce3d980f0c290b88f5ac8940904d71607b4c901d471af864a9&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"400px"}} />
+
+
+> Nome e missione chiara
+
+</Split>
+
+<Notes>
+
+byron bedrock
+
+</Notes>
+
+---
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b53ae41d-8366-4f48-834d-97ebb049136b/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T084447Z&X-Amz-Expires=86400&X-Amz-Signature=3a5e52f054eaff228cee6a78544456f09ce56cafeb4f26c682bb2675b5f5bcd2&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"75vw"}} />
+
+---
+
+<Split>
+
+<div>
+
+Specialisti:
+
+- Raggruppati per tecnologia
+- Tipico approccio nei microservizi
+- Sembra naturale mettere frontender con frontender ecc... parlano stessa lingua (condividono parti comuni di codice, libs e frameworks, tools)
+
+</div>
+
+<div>
+
+Crossfunzionali:
+
+- Raggruppati per usecase
+- Visione completa della feature
+- Magari non aiutano a scrivere una lib e codice perfetto, ma una feature molto più vicina a quello che serve al cliente
+
+</div>
+
+</Split>
+
+---
+
+# Feature Ownership
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6eca6f2f-7b2f-4466-8df2-d23b234c72e1/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T093530Z&X-Amz-Expires=86400&X-Amz-Signature=be8706220fe74f73c308da3c42fd5f253af146d80d37860b42004d17088c08ad&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" />
+
+---
+
+<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c170362b-7640-42cf-bec8-0d2deecfa77d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T093546Z&X-Amz-Expires=86400&X-Amz-Signature=2f51b48998715d012aeb946cedadcc0086845e6acbdc002ef4a9700cef4e1283&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" />
+
