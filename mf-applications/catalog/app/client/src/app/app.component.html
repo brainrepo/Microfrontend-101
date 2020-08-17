@@ -1,0 +1,15 @@
+<div class="w-full bg-gray-900">
+
+  <div class="flex p-3 items-center mb-4">
+    <h3 class="text-lg font-bold text-white flex-grow">Film Catalog</h3>
+      <div class="w-1/3">
+        <input id="price"  (input)="search($event.target.value)" class="bg-gray-800 text-white px-2 py-1 rounded-md shadow-sm text-xs w-full" placeholder="Cerca un film che ti interessa">
+      </div>
+  </div>
+   
+
+  <ul *ngIf="films != []" class="flex flex-wrap">
+   <!-- <div *ngFor="let film of films" [title]="film.Title" [poster]="film.Poster">{{film.Title}} {{film.Poster}}</div> --> 
+    <film-card *ngFor="let film of films" [title]="film.Title" [poster]="film.Poster" [rating]="film.Ratings[0].Value" [genre]="film.Genre" class="w-1/2 md:w-1/4 lg:w-1/6 xl:w-1/12 mb-3"></film-card>
+  </ul>
+</div>
