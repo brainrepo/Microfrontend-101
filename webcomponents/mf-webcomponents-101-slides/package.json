@@ -1,0 +1,19 @@
+{
+  "name": "mf-webcomponents-101-slides",
+  "version": "1.0.0",
+  "description": "Slides corso microfrontend sui webcomponents",
+  "main": "index.js",
+  "devDependencies": {
+    "gatsby-cli": "^2.12.82",
+    "mdx-deck": "^4.1.1",
+    "gatsby": "^2.24.40"
+  },
+  "scripts": {
+    "start": "mdx-deck deck.mdx"
+  },
+  "author": "brainrepo",
+  "license": "ISC",
+  "dependencies": {
+    "code-surfer": "^3.1.1"
+  }
+}

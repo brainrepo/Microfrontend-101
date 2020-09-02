@@ -1,5 +1,9 @@
 
 import { Split } from 'mdx-deck'
+import asset1 from './assets/1.png'
+import asset2 from './assets/2.png'
+import asset3 from './assets/3.png'
+
 import {
   CodeSurfer,
   CodeSurferColumns,
@@ -93,7 +97,7 @@ Nuovi silo e nuovi problemi
 
 ---
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/5e3fa3ed-a788-4b09-96aa-8a519fe906b4/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T075517Z&X-Amz-Expires=86400&X-Amz-Signature=85d7d629a2cadfea6d6d7871186286da12bbced0e617859871ca8ac8db916c33&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"60vw"}} />
+<img src={"https://camunda.com/wp-content/uploads/2020/05/silos.png"} style={{width:"60vw"}} />
 
 ---
 
@@ -106,6 +110,10 @@ Nuovi silo e nuovi problemi
 - ... per ogni slice ci fosse un team dedicato che va dal frontender al backender
 
 </Steps>
+
+---
+
+<img src={asset2} style={{width:"60vw"}} />
 
 ---
 
@@ -126,7 +134,7 @@ Nuovi silo e nuovi problemi
 
 ---
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cdf5770d-ecc1-4f3d-992d-79ab838d510e/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T075604Z&X-Amz-Expires=86400&X-Amz-Signature=0ddc60b96c724fec0388d317b4d7e6d81ba21197261a22451c14fe5d478bfdc6&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"70vw"}} />
+<img src={asset1} style={{height:"70vh"}} />
 
 ---
 
@@ -149,25 +157,15 @@ Nuovi silo e nuovi problemi
 # teams
 
 ---
+ 
 
-<Split>
+Nome e missione chiara
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/ba3cff10-7dcb-46ef-a34c-b02dad6a5546/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T081201Z&X-Amz-Expires=86400&X-Amz-Signature=51a36a59197a7dce3d980f0c290b88f5ac8940904d71607b4c901d471af864a9&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"400px"}} />
-
-
-> Nome e missione chiara
-
-</Split>
-
-<Notes>
-
-byron bedrock
-
-</Notes>
+<img src={asset2} style={{width:"600px"}} />
 
 ---
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b53ae41d-8366-4f48-834d-97ebb049136b/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T084447Z&X-Amz-Expires=86400&X-Amz-Signature=3a5e52f054eaff228cee6a78544456f09ce56cafeb4f26c682bb2675b5f5bcd2&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" style={{width:"75vw"}} />
+<img src={asset3} style={{width:"75vw"}} />
 
 ---
 
@@ -197,11 +195,219 @@ Crossfunzionali:
 
 ---
 
-# Feature Ownership
+# Individuazione di una feature 
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6eca6f2f-7b2f-4466-8df2-d23b234c72e1/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T093530Z&X-Amz-Expires=86400&X-Amz-Signature=be8706220fe74f73c308da3c42fd5f253af146d80d37860b42004d17088c08ad&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" />
+## "strategic design"
+
+prendiamo in prestito alcuni concetti dal DDD
 
 ---
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c170362b-7640-42cf-bec8-0d2deecfa77d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200814%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200814T093546Z&X-Amz-Expires=86400&X-Amz-Signature=2f51b48998715d012aeb946cedadcc0086845e6acbdc002ef4a9700cef4e1283&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" />
+<Split>
 
+<img src="https://www.accountancyeurope.eu/wp-content/uploads/Core-and-more-visual-landscape.png" style={{"width": "40vw"}} />
+
+## Core subdomain
+
+Dominio principale
+
+
+- Cosa rende il sistema degno di essere scritto?
+- Perché non comprare una soluzione già pronta?
+- Perché non esternalizzarlo?
+
+**critico e fondamentale per il business**
+
+Secondo Eric Evans, 20% del valore totale, 5% della codebase, l'80% dello sforzo.
+
+</Split>
+
+---
+
+<Split>
+
+<img src="https://akveo.github.io/nebular/assets/images/articles/custom-auth/form-with-labels.png" style={{"width": "40vw"}} />
+
+## Generic Subdomain
+
+parti del sistema che facilitano l'attività, ma non sono fondamentali per l'azienda. 
+
+- concetto di business fondamentale
+- non è "core" per l'azienda.
+
+possono essere acquistati o esternalizzati
+
+</Split>
+
+---
+
+<Split>
+
+<img src="https://iotcdn.oss-ap-southeast-1.aliyuncs.com/2018-10/IELTS-Prediction.jpg" style={{"width": "40vw"}} />
+
+## Supporting Subdomain
+
+aiutano a svolgere funzioni accessorie o di supporto 
+legate direttamente a ciò che fa l'azienda. 
+
+- Non è necessaria un'altissima qualità del codice
+- Possono essere sviluppate da dev junior o esternalizzati
+
+Tienilo separato dal dominio principale in modo che non lo 
+influenzi
+
+Es. sistema di suggerimenti 
+
+</Split>
+
+---
+
+<Split>
+
+<img src="https://paulwillmott.files.wordpress.com/2016/09/img_0649.jpg" style={{"width": "40vw"}} />
+
+# Feature Ownership
+
+</Split>
+
+---
+
+# Page Ownership
+
+<Steps>
+
+- Viene dopo l'analisi della customer journey
+- Si dividono le view e le si assegnano a team
+- Team lavorano in completa autonomia
+- Scelgono la tecnologia adatta a quel caso specifico
+- Facilmente disaccoppiabile da altri team perché si usano le pagine e link
+
+</Steps>
+
+---
+
+# Fragment Ownership
+
+<Steps>
+
+- Elementi condivisi in più pagine, header e footer
+- Limitare la condivisione dei components
+- Hanno bisogno di comunicare ma potrebbero avere il loro datastore
+
+</Steps>
+
+---
+
+<Split>
+
+<img src="https://images.ctfassets.net/q33z48p65a6w/6eqP7gDNGX9pUGNKV1hUF9/d6734ecc87ed7653c5d64c2e86857f84/Shared_Spaces_700x700.jpg?fit=thumb&fm=webp&h=1000&q=70&w=1000" style={{"width": "20vw"}} />
+
+# Shared topics
+
+</Split>
+
+
+---
+
+<Steps>
+
+- Design system per garantire una coerenza nella ui (ATOMIC DESIGN)
+- Condivisione info per non creare silos (buona docs su confluence)
+- Asset management: Prestare attenzione a non scaricare due volte la stessa libreria
+
+</Steps>
+
+---
+
+
+
+<Split>
+
+<img src="https://www.strogoff.it/wp-content/uploads/2015/11/Untitled-design-3.png" style={{"width": "40vw"}} />
+
+# Vantaggi e Svantaggi
+
+</Split>
+
+---
+
+<Steps>
+
+- Comunicazione
+- Evita il frontend monolith
+- Cambiare spesso
+- Auto contenuto
+- Gestire legacy code
+
+</Steps>
+
+---
+
+# Comunicazione
+
+Nuove feature senza rimbalzi modifiche tra frontend e backend 
+
+evitando il delay dovuto a continui meeting
+
+**Comunicazione nel team più snella e fluida**
+
+---
+
+# Evita il frontend monolith
+
+<Steps>
+
+- Ogni feature o componente è autonomo nel deploy
+- Isoli il rischio al blocco (Errori e bug / Scelte tecnologiche sbagliate)
+- Scope contenuto rende più facile spiegarlo o comprenderlo (ebay / compralo subito)
+- Codebase più piccola, refactoring più agile e manutienibile 
+- Codebase più piccola comportamento più prevedibile
+
+</Steps>
+
+---
+
+# Cambiare spesso
+
+Sperimentare nuove tecnologie con rischio contenuto
+
+<Steps>
+
+- Ci rende (azienda) affascinanti in fase di recuiting.
+- Ottimo in un epoca dove emerge un framework js a settimana
+- Contenere le sperimentazione (es. elm frontend, Phoenix elixir Cassandra) 
+
+</Steps>
+
+---
+
+# Auto contenuto
+
+- Moduli che hanno versioni diverse dello stesso framework
+- Autocontenuto e disaccoppiato = ottimizzato per essere rimosso, __optimize for destroyability__
+
+---
+
+# Legacy code
+
+Cambiare gradualmente a tecnologie più efficienti senza riscrivere tutto
+
+---
+
+<Split>
+
+<img src="https://cdn.pixabay.com/photo/2013/07/13/13/24/fist-160958_1280.png" style={{"width": "20vh"}} />
+
+# Svantaggi
+
+<Steps>
+
+- Aggiungono un livello complessità e se con i microservizi scaliamo aggiungendo nodi non possiamo scalare browser
+- La condivisione di fragment ci rende dipendenti meglio un approccio share nothing come suggerito da Luca mezzalira
+- Ridondanza: scrivere più volte stesso code e fare bug fix più volte una per code base
+
+</Steps>
+
+</Split>
+
+---

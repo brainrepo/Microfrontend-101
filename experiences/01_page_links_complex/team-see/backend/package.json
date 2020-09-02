@@ -1,0 +1,15 @@
+{
+  "name": "petflix-see-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^3.2.1",
+    "fastify-cors": "^4.1.0",
+    "ramda": "^0.27.1"
+  }
+}

@@ -1,0 +1,358 @@
+import { themes } from 'mdx-deck'
+import { Split } from 'mdx-deck'
+import {
+  CodeSurfer,
+  CodeSurferColumns,
+  Step,
+} from "code-surfer";
+import { github, vsDark } from "@code-surfer/themes";
+
+
+export const theme = {
+    ...themes.future
+}
+
+# Single-Page Application
+
+
+Una single page application è un'app che funziona all'interno di un browser 
+e che non richiede il ricaricamento della pagina
+durante l'uso.
+
+---
+
+<img src="https://echoinnovateit.com/wp-content/uploads/2020/02/SPAvsMPA.png" style={{"width": "40vw"}}/>
+
+---
+
+<Split>
+
+<img src="https://media.giphy.com/media/S6BLhq4ZOvIdN0WVEQ/giphy.gif" style={{"width": "40vw"}}/>
+
+- nessun reload della pagina
+- nessun tempo di attesa extra (js css html)
+
+</Split>
+
+---
+
+<Split>
+
+<img src="https://media.giphy.com/media/3otPoNMCHgEfLaO1NK/giphy.gif" style={{"width": "40vw"}} />
+
+SPA richiede il markup e i dati in modo indipendente e rende le pagine direttamente nel browser.
+
+</Split>
+
+
+---
+
+# Vantaggi della SPA:
+
+- Veloce
+  - HTML + CSS + script vengono caricati solo una volta
+  - Solo i dati vengono trasmessi avanti e indietro.
+
+---
+
+# Vantaggi della SPA:
+
+### Lo sviluppo è semplificato <br />  e ottimizzato. 
+
+- Non è necessario scrivere codice per eseguire il rendering delle pagine sul server.
+- È molto più facile iniziare perché di solito è possibile avviare lo sviluppo da un file senza utilizzare alcun server.
+
+---
+
+# Vantaggi della SPA
+
+### Le SPA sono facili <br /> da eseguire il debugger di Chrome
+
+- monitorare le operazioni di rete
+- esaminare elementi di pagina e dati ad essa associati.
+
+---
+
+# Vantaggi della SPA
+
+### È più facile creare <br /> un'applicazione mobile 
+
+lo sviluppatore può riutilizzare lo stesso codice di backend per l'applicazione web e l'applicazione mobile nativa.
+
+---
+
+# Vantaggi della SPA
+
+### SPA può memorizzare in modo <br /> efficace qualsiasi memoria locale. 
+
+Un'applicazione invia una sola richiesta, memorizza tutti i dati, <br/>
+quindi può utilizzare questi dati e funziona anche offline
+
+---
+
+# Contro delle Single-Page Application:
+
+
+È molto complicato fare l'ottimizzazione SEO di un'applicazione a pagina singola.
+
+Il suo contenuto viene caricato da AJAX 
+
+(anche se gli algoritmi di google indicizzano i contenuti <br/>
+ajax caricati nei primi secondi di loading della pagina) 
+
+---
+
+# Contro delle Single-Page Application:
+
+È lenta da scaricare perché è necessario scaricare **client framework pesanti**.
+
+Richiede che JavaScript sia presente e abilitato. 
+(rendering isomorfo / lato server è già possibile eseguire il rendering della pagina sul server)
+
+---
+
+# Contro delle Single-Page Application:
+
+Rispetto all'applicazione “tradizionale”, SPA è meno sicura a casa della possibilità di verificarsi del Cross-Site Scripting (XSS)
+consente agli aggressori di iniettare script lato client nell'applicazione Web da parte di altri utenti.
+
+---
+
+# Contro delle Single-Page Application:
+
+Il memory leak in JavaScript può persino rallentare il sistema più potente (guardare la memoria della webapp di facebook)
+
+---
+
+<Split>
+
+<img src="https://media.giphy.com/media/c6W48VCLPF1l8Uu18A/giphy.gif" style={{"width": "40vw"}} />
+
+# Multi-Page Application
+
+Le applicazioni a più pagine funzionano in modo "tradizionale". 
+
+Ogni cambiamento rendendo una nuova pagina dal server nel browser. 
+
+</Split>
+
+
+---
+
+# Pro delle Multiple-Page Application
+
+- Struttura solida ogni pagina è un nodo della Struttura
+- Molto buona e facile per una corretta gestione SEO. 
+
+---
+
+# Contro dell'applicazione multipagina:
+
+Lo sviluppo del frontend e del backend sono strettamente collegati.
+
+---
+
+
+# SPA o MPA?
+
+**Quale è l'obiettivo?**
+
+---
+
+# Cosa sono le Progressive Web App?
+
+Il web è sempre più dinamico e le esperienze utente devono essere sempre più responsive e reattive.
+
+---
+
+# Applicazioni native
+
+---
+
+<Split>
+
+<img src="https://media.giphy.com/media/j4wVEkeh44GfIVAkeX/giphy-downsized.gif" style={{"width": "40vw"}} />
+
+Le applicazioni native sono note per essere incredibilmente ricche e affidabili. 
+Sono sempre presenti, sulle schermate iniziali, sui dock e sulle barre delle applicazioni. 
+
+</Split>
+
+---
+
+- Funzionano indipendentemente dalla connessione di rete. 
+- Si lanciano nella propria esperienza autonoma. 
+- Possono leggere e scrivere file dal file system locale, 
+- accedere all'hardware connesso tramite USB, seriale o bluetooth 
+- interagire con i dati memorizzati sul dispositivo, come contatti ed eventi del calendario. 
+
+---
+
+<Split>
+
+<img src="https://media.giphy.com/media/26gN0OeJUCCYgxhAc/giphy-downsized.gif" style={{"width": "40vw"}} />
+
+Le applicazioni native sembrano parte del dispositivo su cui vengono eseguite.
+
+</Split>
+
+---
+
+<img src="https://webdev.imgix.net/what-are-pwas/capabilities-reach.svg" style={{"width": "40vw", "background": "white", "padding": "30px"}} />
+
+---
+
+# Capacità / Copertura
+
+- le app native rappresentano le migliori funzionalità 
+- mentre le app Web rappresentano la migliore copertura. 
+
+Allora dove si inseriscono le Progressive Web App?
+
+---
+
+<img src="https://webdev.imgix.net/what-are-pwas/capabilities-reach.svg" style={{"width": "100%", "background": "white", "padding": "30px"}} />
+
+---
+
+# Le Progressive Web Apps (PWA) sono costruite e migliorate con API moderne per fornire 
+
+- funzionalità
+- affidabilità
+- installabilità di tipo nativo 
+- raggiungendo chiunque, ovunque e su qualsiasi dispositivo con una singola base di codice.
+
+---
+
+<Split>
+
+<img src="https://media3.giphy.com/media/OmaMUIOUvN1p6/200.gif" style={{"width": "40vw"}} />
+
+# I tre pilastri dell'app
+
+</Split>
+
+---
+
+
+<Split>
+
+<img src="https://media3.giphy.com/media/ASjPsUpDzoLmw/200.gif" style={{"width": "40vw"}} />
+
+Capace
+
+</Split>
+
+---
+
+# Il web è abbastanza capace di per sé oggi. 
+
+- Possiamo creare app videochat con rtc
+- Abbiamo notifiche
+- Creare app VR WebGL e WebVR
+- Scrivere in C, RUST, o C++ e compilare in webassembly (https://squoosh.app/)
+- l'accesso al file system, 
+- i controlli multimediali, 
+- il badge delle app 
+- il supporto completo degli appunti. 
+
+---
+
+<Split>
+
+<img src="https://media.giphy.com/media/dZtae4XSLInB4JVKAu/giphy.gif" style={{"width": "100%"}} />
+
+# Affidabile
+
+</Split>
+
+---
+
+Un'app Web progressiva affidabile è veloce e affidabile indipendentemente dalla rete.
+
+---
+
+La velocità è fondamentale per consentire agli utenti di utilizzare la tua esperienza. 
+
+Gli utenti adorano le app che rispondono all'interazione in un batter d'occhio e un'esperienza su cui possono 
+fare affidamento.
+
+---
+
+<img src="https://media.giphy.com/media/hv5AEBpH3ZyNoRnABG/giphy.gif" style={{"width": "40vw"}} />
+
+---
+
+# Installabile
+
+- Girano in una finestra autonoma anziché in una scheda del browser. 
+- Possono essere avviati dalla schermata iniziale dell'utente, dal dock, dalla barra delle applicazioni. 
+- Le scorciatoie da tastiera solitamente riservate durante l'esecuzione nel browser diventano disponibili. 
+
+--- 
+
+Le Progressive Web Apps possono registrarsi per accettare il contenuto da altre applicazioni o per essere 
+l'applicazione predefinita per gestire diversi tipi di file.
+
+--- 
+
+# Caratteristiche
+
+---
+
+#Reattive: 
+
+per adattarsi a qualsiasi fattore di forma
+
+---
+
+#Indipendenti dalla connettività: 
+
+progressive enhanced con i Service Worker per consentire loro di lavorare offline
+
+---
+
+# Interazioni simili ad app: 
+
+adotta un modello di applicazione Shell + Content per creare navigazioni e interazioni appy
+
+---
+
+# Fresco: 
+
+Trasparentemente sempre aggiornato grazie al processo di aggiornamento del Service Worker
+
+---
+
+# Sicuro: 
+
+servito tramite TLS (un requisito del Service Worker) per prevenire lo snooping (metodo di intercettazione del traffico multicast. )
+
+---
+
+# Rilevabili: 
+
+sono identificabili come "applicazioni" grazie ai manifesti del W3C 
+
+---
+
+# Ri-ingaggianti: 
+
+Notifiche push
+
+---
+
+# Installabile: 
+
+sulla schermata iniziale tramite prompt forniti dal browser, 
+consentendo agli utenti di "conservare" le app che trovano più utili senza il fastidio di un app store
+
+---
+
+# Collegabile: 
+
+significa che sono zero attriti, zero installazione e facili da condividere. 
+Il potere sociale degli URL è importante.
+
+---
+

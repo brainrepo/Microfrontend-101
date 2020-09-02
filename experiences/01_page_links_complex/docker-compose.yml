@@ -1,0 +1,10 @@
+version: "2.0"
+services:
+  inspire-backend:
+    build: ./team-inspire/backend
+    ports:
+      - "8000:8000"
+  see-backend:
+    build: ./team-see/backend
+    ports:
+      - "3000:3000"
