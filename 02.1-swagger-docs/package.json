@@ -1,0 +1,19 @@
+{
+  "name": "swagger-docs",
+  "version": "1.0.0",
+  "description": "Swagger docs for microfrontend course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "swagger",
+    "microfrontent",
+    "nttdata"
+  ],
+  "author": "brainrepo",
+  "license": "ISC",
+  "dependencies": {
+    "swagger-ui": "^3.31.1"
+  }
+}

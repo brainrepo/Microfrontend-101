@@ -1,0 +1,36 @@
+swagger: "2.0"
+info:
+    title: Team A Feature
+    description: This is a sample.
+    termsOfService: http://swagger.io/terms/
+    contact:
+        name: API Support
+        url: http://www.swagger.io/support
+        email: support@swagger.io
+    license:
+        name: Apache 2.0
+        url: http://www.apache.org/licenses/LICENSE-2.0.html
+    version: 1.0.1
+host: teama.nttdata-microfrontend.it
+basePath: /
+schemes: 
+  - https
+paths:
+  /weather:
+    get:
+      summary: Get temperature
+      description: |
+        Get the temperature for the given city
+        A detailed description of the operation.
+        Use markdown for rich text representation,
+        such as **bold**, *italic*, and [links](https://swagger.io).
+      operationId: getTemperature
+      parameters:
+        - name: city
+          in: query
+          description: City Name
+          type: string
+      responses:
+        200:
+          description: OK
+    
