@@ -1,0 +1,363 @@
+
+import { Split, Steps } from 'mdx-deck'
+
+import composition from './assets/04/composition.png';
+import ssi from './assets/04/ssi.png';
+import lyssi from './assets/04/layoutwithssi.png';
+import performance from './assets/04/performance.png';
+
+import {
+  CodeSurfer,
+  CodeSurferColumns,
+  Step,
+} from "code-surfer";
+import { github, vsDark, nightOwl } from "@code-surfer/themes";
+import petflix from "./assets/logo.png"
+
+export const theme = {
+  fonts: {body: 'avenir, sans-serif'},
+  styles: {
+    Slide: {
+      padding: '20px',
+      textAlign: 'left',
+    },
+    Split: {
+      textAlign: 'left!important'
+    },
+    img: {
+      maxWidth: '100%'
+    },
+    weights: 400,
+  },
+  colors: {
+    text: '#6AD798',
+    background: 'rgb(1, 22, 39)',
+    link: '#fff',
+    pre: '#fff',
+    preBackground: '#051626',
+    code: '#fff'
+  }
+}
+
+# Server side composition
+
+<img src="https://media0.giphy.com/media/xT39D7GQo1m3LatZyU/200.gif" width={{width: '50vw'}}/>
+
+---
+
+La composizione server è una tecnica molto usata:
+
+- IKEA
+- AMAZON
+- ZALANDO
+
+Sono tutte società di ecommerce dove la **seo** è importante
+
+---
+
+<img src={composition} style={{width: '90vw'}}/>
+
+---
+
+Vantaggi:
+
+<Steps>
+
+- la pagina è già completamente assemblata quando raggiunge il browser del cliente. 
+- boost in velocità perche si risparmiano instradamenti (i flussi di rete per la costruzione della pagina sono interni)
+- create nell'ottica del miglioramento progressivo
+
+</Steps>
+
+---
+
+# Composition via Nginx & Server-Side Includes (SSI)
+
+<img src="https://www.servercake.blog/wp-content/uploads/2017/03/SSI.png" style={{width: '50vh'}} />
+
+---
+
+<Split>
+
+
+<img src="https://media3.giphy.com/media/26tn4OE1UmYoJzTPi/200.gif" style={{"width": "40vw"}} />
+
+# SSI
+
+
+<Steps>
+
+- vecchia tecnica anni 90 (usata per incorporare la data su una pagina statica)
+- la specifica è stabile
+- implementazioni nei server web più diffusi sono solide
+- e hanno un piccolo sovraccarico di gestione
+
+</Steps>
+
+</Split>
+
+---
+
+# Implementazine
+
+<Split>
+
+<div>
+
+## Team Decide
+
+aggiunge supporto ssi su Nginx<br/>
+inserisce il commento per l'inclusione
+
+</div>
+
+<div>
+
+## Team Inspire 
+
+gioca a ping pong
+
+</div>
+
+</Split>
+
+---
+
+# Come funziona SSI
+
+```html
+
+<!--#include virtual="/url/to/include" -->
+
+```
+
+Il web-server sostituisce questa direttiva con il contenuto dell'URL
+
+---
+
+<img src={ssi} style={{width: "70vw"}} />
+
+---
+
+<Steps>
+
+- il client richiede la pagina del film
+- nginx inoltra la richiesta a Team Decide perché inizia con /film/
+- genera la pagina con il markup include e la invia a nginx
+- nginx trova la SSI include ed estrae l'URL (virtuale)
+- nginx richiede il suo contenuto da Team Inspire perché l'URL inizia con /inspire/
+- Team Inspire produce il markup per il frammento e lo restituisce
+- Nginx sostituisce il commento SSI sul markup delle pagine del film
+- Nginx invia il markup combinato al browser
+
+</Steps>
+
+
+---
+
+# Configurazione:
+
+---
+
+<CodeSurfer title="" theme={nightOwl} >
+
+```js title="nginx.conf"
+
+...
+server {
+  listen 3000;
+  ssi on;
+  ...
+}
+
+```
+
+
+```js title="filmpage.html"
+
+...
+<aside class="decide_recos">
+  <!--#include virtual="/inspire/fragment/recommendations/bambi" -->
+</aside>
+...
+
+```
+
+
+</CodeSurfer>
+
+---
+
+<img src={lyssi} style={{width: "70vw"}} />
+
+---
+
+La parte estetica non è cambiata 
+
+ma ora la pagina ci arriva gia composta dal server
+
+---
+
+# Migliori tempi di caricamento
+
+
+<img src={performance} style={{width: "80vh"}} />
+
+---
+
+<Split>
+
+<img src="https://d3nuqriibqh3vw.cloudfront.net/styles/aotw_detail_ir/s3/images/soho_01.jpg?itok=ps5ukZTk" style={{"width": "40vw"}} />
+
+Come gestire fragment inaffidabili
+
+</Split>
+
+---
+
+# Il frammento traballante
+
+vogliamo creare un nuovo fragment, ma la parte server non lo rende reliable
+
+ssi aspetta che tutti i fragment siano caricati prima di restituire la pagina
+
+---
+
+<CodeSurfer title="" theme={nightOwl} >
+
+```js
+
+...
+  location /inspire/ {
+    proxy_pass  http://team_inspire;
+    proxy_read_timeout 500ms;
+  }
+...
+
+```
+
+</CodeSurfer>
+
+---
+
+
+<Split>
+
+
+<img src="https://media2.giphy.com/media/nKN7E76a27Uek/200.gif" style={{"width": "40vw"}} />
+
+
+# Il contenuto di fallback
+
+
+Nginx ha un meccanismo integrato per gestire gli include falliti. 
+
+Il comando SSI ha un parametro chiamato stub. 
+
+</Split>
+
+---
+
+<CodeSurfer title="" theme={nightOwl} >
+
+```js
+
+...
+<aside class="decide_recos">
+  <!--# block name="reco_fallback" -->
+    <a href="/recommendations/heidi">
+      Show Recommendations
+    </a>
+  <!--# endblock -->
+  <!--#include
+      virtual="/inspire/fragment/recommendations/heidi"
+      stub="reco_fallback" -->
+</aside>
+...
+
+```
+
+</CodeSurfer>
+
+---
+
+Pensare a fallback e timeout è fondamentale quando si implementa la composizione lato server. 
+
+Un frammento può danneggiare l'intera pagina. 
+
+---
+
+# Un'alternativa, ESI Edge Side Includes
+
+---
+
+Supportato da:
+
+- Akamai 
+- Cloudflare usando gli workers
+
+- Varnish
+- Squid 
+- Mongrel
+
+---
+
+Non supportato da:
+
+- AWS Cloudfront
+
+---
+
+ L'impostazione di una soluzione di integrazione ESI sarebbe simile al nostro esempio. Invece di mettere un Nginx tra il browser e le nostre applicazioni, potremmo scambiarlo con un server Varnish. 
+
+---
+
+<CodeSurfer theme={nightOwl} >
+
+```js title="include"
+
+<esi:include src="https://test.example/fragment" />
+
+```
+
+
+```js title="fallback"
+
+<esi:include
+
+  src="https://test.example/fragment"
+  alt="https://fallback.example/sorry" />
+
+```
+
+
+```js title="timeout"
+
+<esi:include
+  src="https://tractor.example/fragment"
+  maxwait="500" />
+
+```
+
+
+</CodeSurfer>
+
+
+---
+
+
+<Split>
+
+<img src="https://media2.giphy.com/media/5q3NyUvgt1w9unrLJ9/200.gif" style={{"width": "40vw"}} />
+
+# Time to first byte
+Cambia a seconda delle implementazioni 
+
+- Varnish free: caricamento in serie dei frammenti
+- Varnish commercial: caricamento parallelo dei frammenti
+- Varnish commercial: Invio parziale della pagina (non tutti frammenti loaded)
+
+</Split>
+
+---
+

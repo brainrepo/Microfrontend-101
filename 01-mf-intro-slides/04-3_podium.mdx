@@ -1,0 +1,666 @@
+
+import { Split, Steps } from 'mdx-deck'
+
+import podlet from './assets/04/podlet.png';
+import podiumproc from './assets/04/podiumproc.png';
+import podiumfallback from './assets/04/podiumfallback.png';
+import chart from './assets/04/chart.png';
+
+
+import {
+  CodeSurfer,
+  CodeSurferColumns,
+  Step,
+} from "code-surfer";
+import { github, vsDark, nightOwl } from "@code-surfer/themes";
+import petflix from "./assets/logo.png"
+
+export const theme = {
+  fonts: {body: 'avenir, sans-serif'},
+  styles: {
+    Slide: {
+      padding: '20px',
+      textAlign: 'left',
+    },
+    Split: {
+      textAlign: 'left!important'
+    },
+    img: {
+      maxWidth: '100%'
+    },
+    weights: 400,
+  },
+  colors: {
+    text: '#6AD798',
+    background: 'rgb(1, 22, 39)',
+    link: '#fff',
+    pre: '#fff',
+    preBackground: '#051626',
+    code: '#fff'
+  }
+}
+
+
+# podium
+
+<img src={'https://podium-lib.io/img/podium.png'} style={{width: "10vw"}} />
+
+---
+
+# Realizzato da Finn. N. - "La subito.it" norvegese
+
+
+- basata su node.js
+- i frammenti si chiamano podlet
+- le pagine si chiamano layout
+
+---
+
+# Podlet Manifest
+
+metadati strutturati JSON. 
+
+---
+
+<CodeSurfer title="" theme={nightOwl} >
+
+```js 2 title="nome del podlet"
+{
+  "name": "recos",
+  "version": "1.0.2",
+  "content": "/",
+  "fallback": "/fallback",
+  "js": [
+    { value: "/recos/fragment.js" }
+  ],
+  "css": [
+    { value: "/recos/fragment.css" }
+  ]
+  ...
+}
+```
+
+```js 3 title="versione del podlet"
+{
+  "name": "recos",
+  "version": "1.0.2",
+  "content": "/",
+  "fallback": "/fallback",
+  "js": [
+    { value: "/recos/fragment.js" }
+  ],
+  "css": [
+    { value: "/recos/fragment.css" }
+  ]
+  ...
+}
+```
+
+```js 4 title="endpoint del markup"
+{
+  "name": "recos",
+  "version": "1.0.2",
+  "content": "/",
+  "fallback": "/fallback",
+  "js": [
+    { value: "/recos/fragment.js" }
+  ],
+  "css": [
+    { value: "/recos/fragment.css" }
+  ]
+  ...
+}
+```
+
+```js 5 title="versione di fallback cachable"
+{
+  "name": "recos",
+  "version": "1.0.2",
+  "content": "/",
+  "fallback": "/fallback",
+  "js": [
+    { value: "/recos/fragment.js" }
+  ],
+  "css": [
+    { value: "/recos/fragment.css" }
+  ]
+  ...
+}
+```
+
+```js 6:11 title="assets"
+{
+  "name": "recos",
+  "version": "1.0.2",
+  "content": "/",
+  "fallback": "/fallback",
+  "js": [
+    { value: "/recos/fragment.js" }
+  ],
+  "css": [
+    { value: "/recos/fragment.css" }
+  ]
+  ...
+}
+```
+
+</CodeSurfer>
+
+
+
+
+---
+
+<Split>
+
+<img src={podlet} style={{"width": "40vw"}} />
+
+Il manifesto funge da contratto tecnico tra i diversi team.
+
+</Split>
+
+---
+
+# L'architettura di podium
+
+
+- `@podium/layout` funziona nel server che consegna la pagina. 
+    - Legge gli endpoint manifest.json
+    - implementa la cache
+
+- `@podium/podlet` La libreria podlet viene utilizzata dal team, che fornisce un frammento. 
+    - Genera un manifest.json per ogni frammento.
+
+---
+
+<img src={podiumproc} style={{width: "vw"}} />
+
+---
+
+Team decide si carica una sola volta i manifest.json di tutti i podlet
+
+<Steps>
+
+- Il browser richiede la pagina del prodotto. 
+- Team Decide riceve direttamente la richiesta.
+- Team Decide richiede l'endpoint del contenuto del podlet.
+- Il team Inspire risponde con il markup per la raccomandazione. 
+- Team Decide inserisce il markup e aggiunge i riferimenti JS / CSS richiesti dal file manifest. 
+- L'applicazione di Team Decide invia il markup assemblato al browser.
+
+</Steps>
+
+---
+
+# Implementazione
+
+- Ciascuno dei team crea il proprio server basato su Node.js. 
+- Usiamo express framework ma possiamo usare qualunque lib es (fastify).
+
+---
+
+# TEAM DECIDE
+
+---
+
+<CodeSurfer theme={nightOwl} >
+
+```js title="dipendenze del team decide"
+
+...
+  "dependencies": {
+    "@podium/layout": "^4.5.0",
+    "express": "^4.17.1",
+  }
+  ...
+
+```
+
+
+```js title="node server per il servizio layout"
+
+const express = require("express");
+const Layout = require("@podium/layout");
+
+const layout = new Layout({
+  name: "product",
+  pathname: "/product",
+});
+
+const recos = layout.client.register({
+  name: "recos",
+  uri: "http://localhost:3002/recos/manifest.json"
+});
+
+const app = express();
+app.use(layout.middleware());
+
+app.get("/product", async (req, res) => {
+  const recoHTML = await recos.fetch(res.locals.podium);
+
+  res.status(200).podiumSend(`
+    ...
+    <body>
+      <h1>The Tractor Store</h1>
+      <h2>Porsche-Diesel Master 419</h2>
+      <aside>${recoHTML}</aside>
+    </body>
+    </html>
+  `);
+});
+
+app.listen(3001);
+
+```
+
+```js 4:7 title="node server per il servizio layout" subtitle="configurazione del servizio di layout"
+
+const express = require("express");
+const Layout = require("@podium/layout");
+
+const layout = new Layout({
+  name: "product",
+  pathname: "/product",
+});
+
+const recos = layout.client.register({
+  name: "recos",
+  uri: "http://localhost:3002/recos/manifest.json"
+});
+
+const app = express();
+app.use(layout.middleware());
+
+app.get("/product", async (req, res) => {
+  const recoHTML = await recos.fetch(res.locals.podium);
+
+  res.status(200).podiumSend(`
+    ...
+    <body>
+      <h1>The Tractor Store</h1>
+      <h2>Porsche-Diesel Master 419</h2>
+      <aside>${recoHTML}</aside>
+    </body>
+    </html>
+  `);
+});
+
+app.listen(3001);
+
+```
+
+```js 9:13 title="node server per il servizio layout" subtitle="Registrazione del riferimento alla podlet (ikl nome serve per debug)"
+
+const express = require("express");
+const Layout = require("@podium/layout");
+
+const layout = new Layout({
+  name: "product",
+  pathname: "/product",
+});
+
+const recos = layout.client.register({
+  name: "recos",
+  uri: "http://localhost:3002/recos/manifest.json"
+});
+
+const app = express();
+app.use(layout.middleware());
+
+app.get("/product", async (req, res) => {
+  const recoHTML = await recos.fetch(res.locals.podium);
+
+  res.status(200).podiumSend(`
+    ...
+    <body>
+      <h1>The Tractor Store</h1>
+      <h2>Porsche-Diesel Master 419</h2>
+      <aside>${recoHTML}</aside>
+    </body>
+    </html>
+  `);
+});
+
+app.listen(3001);
+
+```
+
+```js 14:16 title="node server per il servizio layout" subtitle="Attacco il podium middleware"
+
+const express = require("express");
+const Layout = require("@podium/layout");
+
+const layout = new Layout({
+  name: "product",
+  pathname: "/product",
+});
+
+const recos = layout.client.register({
+  name: "recos",
+  uri: "http://localhost:3002/recos/manifest.json"
+});
+
+const app = express();
+app.use(layout.middleware());
+
+app.get("/product", async (req, res) => {
+  const recoHTML = await recos.fetch(res.locals.podium);
+
+  res.status(200).podiumSend(`
+    ...
+    <body>
+      <h1>The Tractor Store</h1>
+      <h2>Porsche-Diesel Master 419</h2>
+      <aside>${recoHTML}</aside>
+    </body>
+    </html>
+  `);
+});
+
+app.listen(3001);
+
+```
+
+```js 17:30 title="node server per il servizio layout" subtitle="restituisco il risultato con il podlet inserito"
+
+const express = require("express");
+const Layout = require("@podium/layout");
+
+const layout = new Layout({
+  name: "product",
+  pathname: "/product",
+});
+
+const recos = layout.client.register({
+  name: "recos",
+  uri: "http://localhost:3002/recos/manifest.json"
+});
+
+const app = express();
+app.use(layout.middleware());
+
+app.get("/product", async (req, res) => {
+  const recoHTML = await recos.fetch(res.locals.podium);
+
+  res.status(200).podiumSend(`
+    ...
+    <body>
+      <h1>The Tractor Store</h1>
+      <h2>Porsche-Diesel Master 419</h2>
+      <aside>${recoHTML}</aside>
+    </body>
+    </html>
+  `);
+});
+
+app.listen(3001);
+
+```
+
+</CodeSurfer>
+
+---
+
+Podium è unopinionated quando si tratta di templating. 
+
+Podium fornisce solo una funzione per recuperare il markup di un frammento: await recos.fetch(). 
+
+---
+
+TEAM INSPIRE
+
+---
+
+<CodeSurfer theme={nightOwl} >
+
+```js title="team-inspire/package.json"
+
+...
+    "dependencies": {
+        "@podium/podlet": "^4.3.2",
+        "express": "^4.17.1",
+    }
+...
+
+```
+
+
+```js 4:8 title="team-inspire/index.js" subtitle="definizione podlet, versione e path"
+const express = require("express");
+const Podlet = require("@podium/podlet");
+
+const podlet = new Podlet({
+  name: "recos",
+  version: "1.0.2",
+  pathname: "/recos",
+});
+
+const app = express();
+app.use("/recos", podlet.middleware());
+
+app.get("/recos/manifest.json", (req, res) => {
+  res.status(200).json(podlet);
+});
+
+app.get("/recos", (req, res) => {
+  res.status(200).podiumSend(`
+    <h2>Recommendations</h2>
+    <img src=".../fendt.svg" />
+    <img src=".../eicher.svg" />
+  `);
+});
+
+app.listen(3002);
+
+```
+
+
+```js 10:11 title="team-inspire/index.js" subtitle="creazione di un middleware di express"
+const express = require("express");
+const Podlet = require("@podium/podlet");
+
+const podlet = new Podlet({
+  name: "recos",
+  version: "1.0.2",
+  pathname: "/recos",
+});
+
+const app = express();
+app.use("/recos", podlet.middleware());
+
+app.get("/recos/manifest.json", (req, res) => {
+  res.status(200).json(podlet);
+});
+
+app.get("/recos", (req, res) => {
+  res.status(200).podiumSend(`
+    <h2>Recommendations</h2>
+    <img src=".../fendt.svg" />
+    <img src=".../eicher.svg" />
+  `);
+});
+
+app.listen(3002);
+
+```
+
+```js 13:15 title="team-inspire/index.js" subtitle="definizione della route per esporre il manifest"
+const express = require("express");
+const Podlet = require("@podium/podlet");
+
+const podlet = new Podlet({
+  name: "recos",
+  version: "1.0.2",
+  pathname: "/recos",
+});
+
+const app = express();
+app.use("/recos", podlet.middleware());
+
+app.get("/recos/manifest.json", (req, res) => {
+  res.status(200).json(podlet);
+});
+
+app.get("/recos", (req, res) => {
+  res.status(200).podiumSend(`
+    <h2>Recommendations</h2>
+    <img src=".../fendt.svg" />
+    <img src=".../eicher.svg" />
+  `);
+});
+
+app.listen(3002);
+
+```
+
+```js 17:23 title="team-inspire/index.js" subtitle="restituisce il markup del podlet, usiamo podiumSend per aggiungere degli headers specifico per podium"
+const express = require("express");
+const Podlet = require("@podium/podlet");
+
+const podlet = new Podlet({
+  name: "recos",
+  version: "1.0.2",
+  pathname: "/recos",
+});
+
+const app = express();
+app.use("/recos", podlet.middleware());
+
+app.get("/recos/manifest.json", (req, res) => {
+  res.status(200).json(podlet);
+});
+
+app.get("/recos", (req, res) => {
+  res.status(200).podiumSend(`
+    <h2>Recommendations</h2>
+    <img src=".../fendt.svg" />
+    <img src=".../eicher.svg" />
+  `);
+});
+
+app.listen(3002);
+
+```
+</CodeSurfer>
+
+---
+
+# Fallbacks and timeouts
+
+- il team che possiede il frammento fornisce il fallback
+- il team che include il frammento memorizza localmente questo fallback nella cache
+
+Questo permette il creare risposte di fallback più coerenti, es. "consigli sempre attuali"
+
+---
+
+
+<img src={podiumfallback} style={{width: "60vw"}} />
+
+---
+
+<CodeSurfer  theme={nightOwl} >
+
+```js 9,26:30 title="team-inspire/index.js" 
+
+const express = require("express");
+const Podlet = require("@podium/podlet");
+
+const podlet = new Podlet({
+  name: "recos",
+  version: "1.0.2",
+  pathname: "/recos",
+  fallback: "/fallback"
+});
+
+const app = express();
+app.use("/recos", podlet.middleware());
+
+app.get("/recos/manifest.json", (req, res) => {
+  res.status(200).json(podlet);
+});
+
+app.get("/recos", (req, res) => {
+  res.status(200).podiumSend(`
+    <h2>Recommendations</h2>
+    <img src=".../fendt.svg" />
+    <img src=".../eicher.svg" />
+  `);
+});
+
+app.get("/recos/fallback", (req, res) => {
+  res.status(200).podiumSend(`
+    <a href="">Show reco </a>
+  `);
+});
+
+app.listen(3002);
+
+```
+
+</CodeSurfer>
+
+---
+
+# Quale soluzione è giusta per me?
+
+<Split>
+
+<div>
+
+## Tailor e Podium
+
+- semplificano gestione timeout e fallback
+- semplici in ambiente dev (integrate nell'applicazione)
+- aggiungono complessità
+
+</div>
+
+<div>
+
+## SSI e ESI 
+
+- vecchie ma stabili
+- semplici
+- disaccopiate per natura
+
+</div>
+
+</Split>
+
+---
+
+
+# I pro e contro della composizione server
+
+---
+
+# Pro
+
+- veloci al caricamento (ricevi la pagina gia assemblate)
+- lateza server bassa (tra datacenter dove assembli)
+- molto solida
+- abbraccia il progressive enhancement (puoi sulla pagina aggiungere funzionalita js)
+- SSI ed ESI sono tecnologie comprovate e ben testate senza bisogno di molta manutenzione.
+- utile per i motori di ricerca (caricamento piu veloce punto positivo)
+
+---
+
+# Contro
+
+- se la pagina è grande potresti avere un delay al primo byte
+- manca isolamento tecnico nel browser
+- lo sviluppo locale diventa più complicato. (SSI ESI ma possiamo usare docker)
+
+---
+
+# Quando ha senso l'integrazione lato server?
+
+- SEO è una priorita
+- hai bisogno di un app affidabile in termini di caricamento, puoi usare il miglioramento progressivo
+- creare un'applicazione universale / isomorfica utilizzando la composizione lato server e lato client
+
+---
+
+
+<img src={chart} style={{width: "60vw"}} />

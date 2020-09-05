@@ -1,0 +1,158 @@
+
+import { Split, Steps } from 'mdx-deck'
+
+import composition from './assets/04/composition.png';
+import ssi from './assets/04/ssi.png';
+import lyssi from './assets/04/layoutwithssi.png';
+import performance from './assets/04/performance.png';
+
+import {
+  CodeSurfer,
+  CodeSurferColumns,
+  Step,
+} from "code-surfer";
+import { github, vsDark, nightOwl } from "@code-surfer/themes";
+import petflix from "./assets/logo.png"
+
+export const theme = {
+  fonts: {body: 'avenir, sans-serif'},
+  styles: {
+    Slide: {
+      padding: '20px',
+      textAlign: 'left',
+    },
+    Split: {
+      textAlign: 'left!important'
+    },
+    img: {
+      maxWidth: '100%'
+    },
+    weights: 400,
+  },
+  colors: {
+    text: '#6AD798',
+    background: 'rgb(1, 22, 39)',
+    link: '#fff',
+    pre: '#fff',
+    preBackground: '#051626',
+    code: '#fff'
+  }
+}
+
+
+<img src="https://media3.giphy.com/media/d7fD77EJWbT0tPL4kx/200.gif" style={{"width": "60vw"}} />
+
+---
+
+# Zalando Tailor
+
+<img src="https://www.mosaic9.org/images/diagram.png" style={{width:'200px'}}/>
+
+https://github.com/zalando/tailor
+
+
+---
+
+Tailor è una libreria Node.js che analizza l'HTML delle pagine per speciali tag di frammento, 
+recupera il contenuto di riferimento e lo inserisce nel markup della pagina.
+
+
+Tailor è disponibile come pacchetto (node-tailor). 
+
+Puoi installarlo tramite NPM.
+
+---
+
+<CodeSurfer theme={nightOwl} >
+
+```js title="server"
+
+const http = require('http');
+const Tailor = require('node-tailor');
+const tailor = new Tailor({ templatesPath: './views' });
+const server = http.createServer(tailor.requestHandler);
+server.listen(3001);
+
+```
+
+
+```html title="page markup"
+
+...
+<body>
+  <h1>Petflix</h1>
+  ...
+  <fragment src="http://localhost:90/recos" />
+</body>
+...
+
+```
+
+
+```js title="Uso del timeout e fallback"
+
+<fragment
+  src="http://localhost:3002/recos"
+  timeout="500"
+  fallback-src="http://localhost:3002/recos/fallback"
+/>
+
+```
+
+
+
+</CodeSurfer>
+
+---
+
+<Split>
+
+<img src="https://media2.giphy.com/media/QBd2kLB5qDmysEXre9/200.gif" style={{"width": "40vw"}} />
+
+# Time to first byte & streaming
+
+Supporto per i modelli di streaming. 
+
+Invia il risultato al browser mentre il modello di pagina (layout) viene analizzato e mentre arrivano i frammenti. 
+
+</Split>
+
+---
+
+Gestione delle risorse
+
+Oltre al markup effettivo, un endpoint del frammento può anche specificare stili e script associati che vanno con questo frammento. 
+Tailor utilizza gli header HTTP per questo.
+
+---
+
+<CodeSurfer title="" theme={nightOwl} >
+
+```js
+
+$ curl -I http://localhost:3002/recos
+HTTP/1.1 200 OK
+Link: <http://localhost:3002/static/fragment.css>; rel="stylesheet",
+      <http://localhost:3002/static/fragment.js>;  rel="fragment-script"
+Content-Type: text/html
+Connection: keep-alive
+
+```
+
+</CodeSurfer>
+
+---
+
+Tailor legge queste intestazioni e aggiunge gli script e gli stili al documento. 
+
+Questa tecnica permette di includere una sola volta la risorsa in questione
+
+---
+
+I team devono racchiudere tutto JavaScript in un modulo AMD, 
+che verrà caricato dal caricatore del modulo require.js. 
+
+Inoltre, non puoi controllare facilmente che il servizio aggiunge script e tag di stile al markup.
+
+---
+
