@@ -16,7 +16,9 @@
     "03-2": "mdx-deck 03-2_server_side_routing.mdx",
     "04-1": "mdx-deck 04-1_server_side_composition.mdx",
     "04-2": "mdx-deck 04-2_zalando_tailor.mdx",
-    "04-3": "mdx-deck 04-3_podium.mdx"
+    "04-3": "mdx-deck 04-3_podium.mdx",
+    "05-1": "mdx-deck 05-1_client_composition.mdx",
+    "06-1": "mdx-deck 06-1_pattern_di_comunicazione.mdx"
   },
   "author": "brainrepo",
   "license": "ISC",
@@ -24,3 +26,4 @@
     "code-surfer": "^3.1.1"
   }
 }
+

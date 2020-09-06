@@ -1,0 +1,581 @@
+
+import { Split, Steps } from 'mdx-deck'
+
+import comm1 from './assets/06/comm1.png';
+import commtype from './assets/06/commtype.png';
+import commhtf from './assets/06/commhtf.png';
+import frcomm from './assets/06/frcomm.png';
+import upcomm from './assets/06/upcomm.png';
+import up from './assets/06/up.png';
+import cusevtbroad from './assets/06/cusevtbroad.png';
+import bubble from './assets/06/bubble.png';
+import context from './assets/06/context.png';
+import state from './assets/06/state.png';
+
+
+
+import {
+  CodeSurfer,
+  CodeSurferColumns,
+  Step,
+} from "code-surfer";
+import { github, vsDark, nightOwl } from "@code-surfer/themes";
+import petflix from "./assets/logo.png"
+
+export const theme = {
+  fonts: {body: 'avenir, sans-serif'},
+  styles: {
+    Slide: {
+      padding: '20px',
+      textAlign: 'left',
+    },
+    Split: {
+      textAlign: 'left!important'
+    },
+    img: {
+      maxWidth: '100%'
+    },
+    weights: 400,
+  },
+  colors: {
+    text: '#6AD798',
+    background: 'rgb(1, 22, 39)',
+    link: '#fff',
+    pre: '#fff',
+    preBackground: '#051626',
+    code: '#fff'
+  }
+}
+
+<Split>
+
+<img src="https://media0.giphy.com/media/ftAyb0CG1FNAIZt4SO/200.gif" style={{"width": "40vw"}} />
+
+# Pattern di comunicazione
+
+I fragment di diversi team devono dialogare tra loro. 
+
+Esempio: quando si aggiunge un prodotto al carrello cliccando sul pulsante + allora anche l'cona del carrello si deve aggiornare
+
+
+
+</Split>
+
+
+---
+
+<img src={comm1} style={{width: "70vw"}} />
+
+---
+
+# Comunicazione dell'interfaccia utente
+
+Fino ad ora la comunicazione era data da :
+
+- Links da una pagina ell'altra
+- attributi sul webcomponent per comunicazione lato frontend
+
+tutto gestite con iterfacce chiare (contratti)
+
+Abbiamo ora bisogno di uno standard di comunicaizone dentro la ui
+
+---
+
+
+<img src={commtype} style={{width: "70vw"}} />
+
+---
+
+# Parent to fragment
+
+- il team decide decide di aggiungere una opzione al prodotto
+- alla selezione di questa opzione anche il pulsante acquista si deve aggiornare
+
+---
+
+
+<img src={commhtf} style={{width: "70vw"}} />
+
+---
+
+La soluzione è mettere negli attributi una nuova voce edition,
+e il team checkout ascolterà il cambio di questo attributo per reagire di conseguenza
+
+---
+
+# Contratto
+
+- name: checkout-buy: 
+- attr:
+    -  sku = [sku]
+    - edition = [standard | platinum] 
+- esempio: `<checkout-buy sku="porsche" edition="platinum"> </checkout-buy>`
+
+---
+
+# Implementazione
+
+---
+
+<CodeSurfer theme={nightOwl} >
+
+```js title="html (team decide)"
+
+...
+<img class="decide_image"
+  src="https://mi-fr.org/img/fendt_standard.svg" />
+...
+<label class="decide_editions">
+  <input type="checkbox" name="edition" value="platinum" />
+  <span>Platinum Edition</span>
+</label>
+<checkout-buy sku="fendt" edition="standard"></checkout-buy>
+...
+
+```
+
+
+```js title="js (team decide)"
+
+const option = document.querySelector(".decide_editions input");
+const image = document.querySelector(".decide_image");
+const buyButton = document.querySelector("checkout-buy");
+
+option.addEventListener("change", e => {
+  const edition = e.target.checked ? "platinum" : "standard";
+  buyButton.setAttribute("edition", edition);
+  image.src = image.src.replace(/(standard|platinum)/, edition);
+});
+
+```
+
+
+```js title="component (team checkout)"
+
+const prices = {
+  porsche: { standard: 66, platinum: 966 },
+  fendt: { standard: 54, platinum: 945 },
+  eicher: { standard: 58, platinum: 958 }
+};
+
+class CheckoutBuy extends HTMLElement {
+  static get observedAttributes() {
+    return ["sku", "edition"];
+  }
+  connectedCallback() {
+    this.render();
+  }
+  attributeChangedCallback() {
+    this.render();
+  }
+  render() {
+    const sku = this.getAttribute("sku");
+    const edition = this.getAttribute("edition");
+    this.innerHTML = `
+      <button type="button">
+        buy for ${prices[sku][edition]} $
+      </button>
+    `;
+    ...
+  }
+}
+
+```
+
+</CodeSurfer>
+
+---
+
+<img src={frcomm} style={{width: "70vw"}} />
+
+---
+
+Questa tecnica si chiama
+
+# Unidirectional dataflow
+
+- attribute down
+- event up
+
+resa famosa da react e redux (virtual dom limits)
+
+---
+
+# Fragment to Parent
+
+<img src='https://media2.giphy.com/media/3o7TKHVU0xsgGDCyPu/200.gif' style={{width: "vw"}} />
+
+---
+
+Cosa succede se si vuole notificare l'avvenuto inserimento al carrello con una animazione a tutta pagina
+
+- non è opportuno che il team checkout aggisca fuori dal contesto del suo frammento
+- animazione dovrebbe essere presa in carico dal team decide
+
+---
+
+<img src={upcomm} style={{width: "60vw"}} />
+
+---
+
+Il componente sviluppato dal team checkout emette un evento, che verrà preso in carico dall'app del team decide
+
+Aggiorniamo l'interfaccia;
+
+- tag-name: checkout-buy
+- attribute: `sku=[sku]`
+- attribute: `edition=[standard|platinum]`
+- emit: checkout:item_added
+
+notare che gli eventi sono nel contesto del namespace
+
+---
+
+<Split>
+
+
+<img src="https://media4.giphy.com/media/ekY8JdlX7FqQTbteE7/200.gif" style={{"width": "40vw"}} />
+
+# Emissione di eventi custom
+
+Usiamo API CustomEvents nativa del browser: 
+emettere eventi che funzionano allo stesso modo degli eventi del browser nativo come clic o modifica. 
+
+</Split>
+
+---
+
+<CodeSurfer theme={nightOwl}>
+
+```js title="produce custom event" subtitle="team checkout"
+
+class CheckoutBuy extends HTMLElement {
+  ...
+  render() {
+    ...
+    this.innerHTML = ...;
+    this.querySelector("button").addEventListener("click", () => {
+      ...
+      const event = new CustomEvent("checkout:item_added");
+      this.dispatchEvent(event);
+    });
+  }
+}
+
+```
+
+```js title="consume the event" subtitle="team decide" 
+
+const buyButton = document.querySelector("checkout-buy");
+const product = document.querySelector(".decide_product");
+buyButton.addEventListener("checkout:item_added", e => {
+  product.classList.add("decide_product--confirm");
+});
+product.addEventListener("animationend", () => {
+  product.classList.remove("decide_product--confirm");
+});
+
+```
+
+</CodeSurfer>
+
+---
+
+tutta la responsabilità dell'animazione di checkout è in capo al team decide.
+
+---
+
+<img src={up} style={{width: "70vw"}} />
+
+---
+
+# I vantaggi dell'uso dell'event mecanism dl browser
+
+
+<Steps>
+
+- i nomi dei custom events possono venire dal dominio. 
+- i fragment sono parent agnostic
+- supportati da tutti i framework e libs
+- funzionalità standard disponibili (stopPropagation, target)
+- debug con tool browser integrati
+
+</Steps>
+
+---
+
+<Split>
+
+<img src="https://media2.giphy.com/media/g0jlZ04SeV4AM1lvFw/200.gif" style={{"width": "40vw"}} />
+
+# Fragment to fragment
+
+</Split>
+
+---
+
+Se avessimo bisogno di mostrare un minicarrello potremo creare un nuovo componente.
+
+Questo componente non ha attributi e non emette gli eventi
+
+---
+
+# Come possiamo notificare il cambiamento?
+
+---
+
+<Steps>
+
+- ‼️ **Comunicazione diretta**: Un frammento comunica con un altro e agisce nel suo dom (forte accoppiamento, no buono! in condizione di rimozione, duplicazione)
+- 👨‍👦**Orchestrazione tramite il parent**:  la pagina del prodotto di Team Decide ascolta l'evento item_added dal pulsante di acquisto e aggiorna minicarrello tramite attributo. 
+- 🚌**Event-Bus / broadcasting**: canale di comunicazione globale. frammenti pubblicano e/o ascoltano da questo canale. Api nativa "Broadcast channel" che supporta la comunicazione anche tra iframe e finestre
+
+</Steps>
+
+`https://www.digitalocean.com/community/tutorials/js-broadcastchannel-api`
+
+---
+
+# Implementazione
+
+
+<img src={cusevtbroad} style={{width: "60vw"}} />
+
+---
+
+# Dobbiamo quindi aggiornare l'interfaccia / Contratto del pulsante di acquisto
+
+- Tag name: `checkout-buy`
+- attributes: sku=[sku], edition=[standard|platinum]
+- emits:
+    - name: checkout:item_added
+    - payload: {sku: [sku], edition: [standard|platinum]}
+
+Occhio al payload: Introduce accoppiamento
+
+---
+
+<CodeSurfer theme={nightOwl} >
+
+```js title="i custom events permettono il passaggio di payload"
+
+...
+const event = new CustomEvent("checkout:item_added", *{
+  bubbles: true,
+  detail: { sku, edition }
+}*);
+this.dispatchEvent(event);
+...
+
+```
+
+```js 4 title="bubble" subtitle="solitamente i custom events non risalgono il dom, noi abbiamo bisofbo che questo succeda quindi usiamo questa opzione"
+
+...
+const event = new CustomEvent("checkout:item_added", {
+  bubbles: true,
+  detail: { sku, edition }
+});
+this.dispatchEvent(event);
+...
+
+```
+
+</CodeSurfer>
+
+  
+---
+
+# Implementiamo il minicart
+
+---
+
+<CodeSurfer  theme={nightOwl} >
+
+```js
+
+...
+class CheckoutMinicart extends HTMLElement {
+  connectedCallback() {
+    this.items = [];
+    window.addEventListener("checkout:item_added", e => {
+      this.items.push(e.detail);
+      this.render();
+    });
+    this.render();
+  }
+  render() {
+    this.innerHTML = `
+      You've picked ${this.items.length} tractors:
+      ${this.items.map(({ sku, edition }) =>
+        `<img src="https://mi-fr.org/img/${sku}_${edition}.svg" />`
+      ).join("")}
+    `;
+    ...
+  }
+}
+window.customElements.define("checkout-minicart", CheckoutMinicart);
+
+```
+
+
+```js title="inclusione del nuovo component"
+
+...
+<body>
+  ...
+  <div class="decide_details">
+    <checkout-buy sku="fendt" edition="standard"></checkout-buy>
+  </div>
+  <div class="decide_summary">
+    <checkout-minicart></checkout-minicart>
+  </div>
+  <script src="http://localhost:3003/static/fragment.js" async></script>
+</body>
+...
+
+```
+
+
+</CodeSurfer>
+
+---
+
+# Bubbling
+
+<img src={bubble} style={{width: "vw"}} />
+
+---
+
+# Dispatchare direttamente a livello di window
+
+Questa soluzione è un po piu rischiosa:
+
+- non posso tenere traccia del target
+- event.target utile in fase di debug
+- skippa tutti gli event.stopPropagation
+
+Meglio usare `element.dispatchEvent(new CustomEvent(..., {bubbles: true}))`
+
+---
+
+# Quando a senso usare la ui communication
+
+## Usa semplici payloads
+
+<Steps>
+
+- Gli eventi non dovrebbero funzionare come un modo per trasferire i dati. 
+- Il loro scopo è agire come una spinta verso altre parti dell'interfaccia utente.
+- se hai dei buoni confini tra i team la comunicazione risulta ridotta al minimo
+
+</Steps>
+
+---
+
+# Troppa comunicazione puo' essere un bad smell
+
+solitamente se aumenta la comunicazione è perchè esistono troppi casi d'uso nella stessa vista
+
+---
+
+# Eventi e Async Loading
+
+Gli eventi emessi prima che un componente ha finito di caricarsi saranno persi per quel componente
+
+---
+
+# Altri metodi di comunicazione
+
+---
+
+## Global context e authentication
+
+Ci sono dei dati che devono essere condivisi tra tutti i mfe, **info di contesto**
+
+- lingiua utente
+- loggato o anonimo
+- staging o prodotto
+
+---
+
+<img src={context} style={{width: "80vw"}} />
+
+---
+
+# I due punti critici della condivisione dei dati tra mfe
+
+- Delivery: come otteniamo le informazioni ai micro frontend dei team?
+- Responsabilità: quale squadra determina i dati e implementa i concetti associati?
+
+---
+
+
+# Delivery
+
+<Split>
+
+<div>
+    ## Server rendering mfe
+
+    headers http
+    cookies
+
+    il frontend proxy li imposta ad ogni req
+</div>
+
+<div>
+    ## Client mfe
+
+    api js globale (nella app shell)
+</div>
+
+</Split>
+
+---
+
+# Responsabilità
+
+E' una buona pratica che un team si prenda in carico la gestione della appshell
+
+---
+
+# Gestire lo stato
+
+Se stai utilizzando una libreria di gestione dello stato come Redux, 
+ogni micro frontend o almeno ogni team dovrebbe avere il proprio stato locale
+
+---
+
+<img src={state} style={{width: "60vw"}} />
+
+
+---
+
+# condivisione stato:
+
+- introdurrebbe l'accoppiamento e renderebbe difficile modificare le applicazioni in seguito.
+- meglio la duplicazione dello stato
+- la condivisione dello stato lo porta ad essere usato come mezzo di comunicaizone tra team (MALE)
+
+---
+
+# comunicazione frontend - backend
+
+Ogni microfrontend di un team deve parlare solo con un micro servizio dello stesso team.
+
+Se cosi non fosse abbiamo un badsmell, forse non abbiamo diviso bene i subdomains
+
+---
+
+# Replica dei dati
+
+1. Se voglio solo mostrare i dati:
+
+    - chiedo al padrone dei dati di farmi un component per mostrarli
+
+2. se voglio applicarci logica di business
+
+    - duplico periodicamente i dati
+
+---

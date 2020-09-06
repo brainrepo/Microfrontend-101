@@ -1,0 +1,17 @@
+{
+  "name": "05-webcomponents",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently --names \"decide, inspire, checkout\" \"mfserve --listen 3001 team-decide\" \"mfserve --listen 3002 team-inspire\" \"mfserve --listen 3003 team-checkout\" \"wait-on http://localhost:3001/product/fendt && opener http://localhost:3001/product/fendt\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@microfrontends/serve": "^11.3.0",
+    "concurrently": "^5.2.0",
+    "opener": "^1.5.1",
+    "wait-on": "^5.0.1"
+  }
+}

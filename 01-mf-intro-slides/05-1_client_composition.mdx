@@ -1,0 +1,260 @@
+
+import { Split, Steps } from 'mdx-deck'
+
+import client from './assets/05/client.png';
+import userjurney from './assets/05/userjurney.png';
+import incapsule from './assets/05/incapsule.png';
+import webcomponents from './assets/05/webcomponents.png';
+import chart from './assets/05/chart.png';
+
+
+
+import {
+  CodeSurfer,
+  CodeSurferColumns,
+  Step,
+} from "code-surfer";
+import { github, vsDark, nightOwl } from "@code-surfer/themes";
+import petflix from "./assets/logo.png"
+
+export const theme = {
+  fonts: {body: 'avenir, sans-serif'},
+  styles: {
+    Slide: {
+      padding: '20px',
+      textAlign: 'left',
+    },
+    Split: {
+      textAlign: 'left!important'
+    },
+    img: {
+      maxWidth: '100%'
+    },
+    weights: 400,
+  },
+  colors: {
+    text: '#6AD798',
+    background: 'rgb(1, 22, 39)',
+    link: '#fff',
+    pre: '#fff',
+    preBackground: '#051626',
+    code: '#fff'
+  }
+}
+
+# Client integration
+
+Se i tempi di caricamento non sono una priorità
+Ma abbiamo bisogno di interfaccie catchy
+
+---
+
+<Split>
+
+<img src={client} style={{"width": "40vw"}} />
+
+- Ogni frammento è la sua mini-applicazione
+- può eseguire il rendering e aggiornare il markup
+
+
+Thunder.js e Wonder.js sono segnaposto per il framework di frontend
+
+
+</Split>
+
+---
+
+# petflix
+
+---
+
+<img src={userjurney} style={{width: "vw"}} />
+
+
+---
+
+<Steps>
+
+- Introduciamo un nuovo team
+- il team si occuperà del processo di acquisto del film
+- team Checkout ha scelto di utilizzare il rendering lato client 
+- il team espone due elementi, il primo è il webcomponent del pulsante, il secondo è la SPA di checkout
+
+</Steps>
+
+---
+
+<Split>
+
+<img src="https://media3.giphy.com/media/3orieWNnUuuFa0y1NK/200.gif" style={{"width": "40vw"}} />
+
+# Contratti
+
+</Split>
+
+---
+
+## Tag Button
+
+Nome tag Buy Button: attributi checkout-buy: sku = [sku] esempio: <checkout-buy sku = "porsche"> </checkout-buy>
+
+- tag-name: `checkout-buy`
+- attributes: `sku=[sku]`
+- example: `<checkout-buy sku="porsche"></checkout-buy>`
+
+---
+
+# Assets
+
+Gli assets verranno esposti su differenti indirizzi
+
+- http://localhost:93/static/fragment.js 
+- http://localhost:93/static/fragment.css
+
+---
+
+<Split>
+
+<img src="https://media4.giphy.com/media/26FPzWY5I6WqElJC0/200.gif" style={{"width": "40vw"}} />
+
+# Web Component as a container format
+
+Il webcomponent incapsulerà la logica di business proprietaria del team checkout nascondendola al team decide
+
+</Split>
+
+---
+
+
+<img src={incapsule} style={{width: "60vw"}} />
+
+---
+
+# ... Vai alle slide dei webcomponents e poi ritorna
+
+---
+
+<Split>
+
+<img src="https://media2.giphy.com/media/3oEjHE6anD68swMCyI/200.gif" style={{"width": "40vw"}} />
+
+# Contenere i framework nei Web Components
+
+Spesso abbiamo bisogno di qualcosa di piu robusto di un innerHtml e di un add event listener
+
+In questo caso è buona pratica avvolgere il tuo framework in un componente Web
+
+</Split>
+
+---
+
+# Usare i metodi di lifecycle
+
+constructor, connectedCallback, disconnectedCallback e attributeChangedCallback. 
+
+Possiamo usare questi metodi per capire quando il sistema host ci 
+ospita e lamciare eventi specifici del framework che stiamo usando
+
+---
+
+<img src={webcomponents} style={{width: "60vw"}} />
+
+---
+
+Esistono framework che esportano out of the box sistemi già wrappati su webcomponents:
+
+- Angular Elements (connettere la app ai custom elements lifecycle)
+- @vue/web-component-wrapper
+
+Altri si basano centralmente su questa tecnologia
+
+- stencil
+
+---
+
+<Split>
+
+<img src="https://media1.giphy.com/media/d89BjPGXijE0imFOxA/200.gif" style={{"width": "40vw"}} />
+
+
+# Isolamento dello stile utilizzando Shadow DOM
+
+- isolare una sottostruttura del DOM dal resto della pagina
+- bloccare il propagarsi degli stili fuori dai webcomponents
+- non ho più bisogno dello scoping esplicito
+
+</Split>
+
+---
+
+# Pro
+
+<Steps>
+
+- Forte isolamento simile a un iframe. 
+- Nessuno namespacing richiesto.
+- Impedisce agli stili globali di penetrare in un micro frontend. 
+- Ottimo quando si lavora con applicazioni legacy.
+- Potenziale per ridurre la necessità di toolchain CSS.
+- I fragments sono autonomi. Nessun riferimento a file CSS separati.
+
+</Steps>
+
+---
+
+# Contro
+
+<Steps>
+
+- Non supportato nei browser meno recenti. I polyfill esistono ma sono pesanti e si basano su euristiche.
+- Richiede JavaScript per funzionare.
+- Nessun miglioramento progressivo o rendering del server. S
+- Shadow DOM non può essere definito in modo dichiarativo tramite HTML. (templates)
+- Difficile condividere stili comuni tra diversi Shadow DOM. 
+- Non funziona con approcci di stile che utilizzano su classi CSS globali, come Twitter Bootstrap.
+
+</Steps>
+
+---
+
+# Microfrontend con webcomponents
+## Pro e Contro
+
+---
+
+# I benefici
+
+<Steps>
+
+- tandard Web ampiamente implementato
+- comodo lavorare direttamente con le API del browser
+- puoi decidere se usare lo shadow dom o meno
+- i lifecycle method rendono universale e quindi implicitamente concordato il processo di inizializzazione e deinizializzazione dei mfe components
+
+</Steps>
+
+---
+
+# Gli svantaggi
+
+<Steps>
+
+- richiedono JavaScript lato client 
+- tutti i principali framework forniscono un modo per eseguire il rendering del contenuto dal server
+- esistono pochi e proprietari modi di idratare lo shadow dom nel server ma non è uno standard
+- per i browser vecchi si devono uare polyfill
+- polyfill per shadow dom complesso (ti conviene usare i namespaces
+
+</Steps>
+
+---
+
+# Quando ha senso utilizzarlo
+
+- se hai una ui interattiva
+- hai bisogno di un collante tra le varie componenti
+
+---
+
+<img src={chart} style={{width: "80vw"}} />
+
